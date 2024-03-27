@@ -4,11 +4,11 @@ from ament_index_python.packages import get_package_share_directory
 
 
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, TimerAction
+from launch.actions import IncludeLaunchDescription, TimerAction, RegisterEventHandler, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import Command
-from launch.actions import RegisterEventHandler
+from launch.substitutions import Command, LaunchConfiguration, PythonExpression
 from launch.event_handlers import OnProcessStart
+from launch.conditions import IfCondition
 
 from launch_ros.actions import Node
 
@@ -16,9 +16,13 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
 
-
     # Include the robot_state_publisher launch file, provided by our own package. Force sim time to be enabled
     # !!! MAKE SURE YOU SET THE PACKAGE NAME CORRECTLY !!!
+
+    activate_slam_arg = DeclareLaunchArgument(
+        'activate_slam', default_value='false',
+        description='Flag to activate SLAM'
+    )
 
     package_name='articubot_one' #<--- CHANGE ME
 
@@ -88,6 +92,9 @@ def generate_launch_description():
         )
     )
 
+    # activate slam node after 10 seconds if it is activated
+
+
 
     # Code for delaying a node (I haven't tested how effective it is)
     # 
@@ -105,7 +112,22 @@ def generate_launch_description():
     #
     # Replace the diff_drive_spawner in the final return with delayed_diff_drive_spawner
 
+    # Use a Python function to decide whether to include the SLAM launch
+    slam_toolbox_launch_description = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'online_async_launch.py')
+        ]),
+        launch_arguments={
+            'params_file': os.path.join(get_package_share_directory('articubot_one'), 'config', 'mapper_params_online_async.yaml'),
+            'use_sim_time': 'false'
+        }.items(),
+        condition=IfCondition(LaunchConfiguration('activate_slam'))
+    )
 
+    delayed_slam_launch = TimerAction(
+        period=10.0, 
+        actions=[slam_toolbox_launch_description]
+    )
 
     # Launch them all!
     return LaunchDescription([
@@ -115,5 +137,7 @@ def generate_launch_description():
         rplidar,
         delayed_controller_manager,
         delayed_diff_drive_spawner,
-        delayed_joint_broad_spawner
+        delayed_joint_broad_spawner,
+        activate_slam_arg,
+        delayed_slam_launch
     ])
