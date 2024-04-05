@@ -24,6 +24,16 @@ def generate_launch_description():
         description='Flag to activate SLAM'
     )
 
+    activate_nav_arg = DeclareLaunchArgument(
+        'activate_nav', default_value='false',
+        description='Flag to activate Nav2'
+    )
+
+    activate_loc_arg = DeclareLaunchArgument(
+        'activate_loc', default_value='false',
+        description='Flag to activate localisation'
+    )
+
     package_name='articubot_one' #<--- CHANGE ME
 
     rsp = IncludeLaunchDescription(
@@ -129,6 +139,40 @@ def generate_launch_description():
         actions=[slam_toolbox_launch_description]
     )
 
+    loc_launch_description = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            os.path.join(get_package_share_directory('nav2_bringup'), 'launch', 'localization_launch.py')
+        ]),
+        launch_arguments={
+            'params_file': os.path.join(get_package_share_directory('articubot_one'), 'config', 'nav2_params.yaml'),
+            'map':os.path.join(get_package_share_directory('articubot_one'), 'maps', 'my_map_save.yaml'),
+            'use_sim_time': 'false'
+        }.items(),
+        condition=IfCondition(LaunchConfiguration('activate_loc'))
+    )
+
+    delayed_loc_launch = TimerAction(
+        period=10.0, 
+        actions=[loc_launch_description]
+    )
+
+    nav_launch_description = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            os.path.join(get_package_share_directory('nav2_bringup'), 'launch', 'navigation_launch.py')
+        ]),
+        launch_arguments={
+            'params_file': os.path.join(get_package_share_directory('articubot_one'), 'config', 'nav2_params.yaml'),
+            'use_sim_time': 'false',
+            'map_subscribe_transient_local': 'true'
+        }.items(),
+        condition=IfCondition(LaunchConfiguration('activate_slam'))
+    )
+
+    delayed_nav_launch = TimerAction(
+        period=20.0, 
+        actions=[nav_launch_description]
+    )
+
     # Launch them all!
     return LaunchDescription([
         rsp,
@@ -139,5 +183,9 @@ def generate_launch_description():
         delayed_diff_drive_spawner,
         delayed_joint_broad_spawner,
         activate_slam_arg,
-        delayed_slam_launch
+        delayed_slam_launch,
+        activate_nav_arg,
+        delayed_nav_launch,
+        activate_loc_arg,
+        delayed_loc_launch
     ])
