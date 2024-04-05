@@ -145,7 +145,7 @@ def generate_launch_description():
         ]),
         launch_arguments={
             'params_file': os.path.join(get_package_share_directory('articubot_one'), 'config', 'nav2_params.yaml'),
-            'map':os.path.join(get_package_share_directory('articubot_one'), 'maps', 'my_map_save.yaml'),
+            'map':os.path.join(get_package_share_directory('articubot_one'), 'maps', 'map_arena_save.yaml'),
             'use_sim_time': 'false'
         }.items(),
         condition=IfCondition(LaunchConfiguration('activate_loc'))
@@ -165,7 +165,7 @@ def generate_launch_description():
             'use_sim_time': 'false',
             'map_subscribe_transient_local': 'true'
         }.items(),
-        condition=IfCondition(LaunchConfiguration('activate_slam'))
+        condition=IfCondition(LaunchConfiguration('activate_nav'))
     )
 
     delayed_nav_launch = TimerAction(
