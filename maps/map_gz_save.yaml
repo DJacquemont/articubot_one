@@ -1,4 +1,4 @@
-image: map_arena_save.pgm
+image: map_gz_save.pgm
 mode: trinary
 resolution: 0.05
 origin: [-0.989, -1.3, 0]

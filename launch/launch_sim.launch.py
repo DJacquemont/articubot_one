@@ -4,8 +4,11 @@ from ament_index_python.packages import get_package_share_directory
 
 
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, TimerAction, RegisterEventHandler, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import Command, LaunchConfiguration, PythonExpression
+from launch.event_handlers import OnProcessStart
+from launch.conditions import IfCondition
 
 from launch_ros.actions import Node
 
@@ -13,6 +16,20 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
 
+    activate_slam_arg = DeclareLaunchArgument(
+        'activate_slam', default_value='false',
+        description='Flag to activate SLAM'
+    )
+
+    activate_nav_arg = DeclareLaunchArgument(
+        'activate_nav', default_value='false',
+        description='Flag to activate Nav2'
+    )
+
+    activate_loc_arg = DeclareLaunchArgument(
+        'activate_loc', default_value='false',
+        description='Flag to activate localisation'
+    )
 
     # Include the robot_state_publisher launch file, provided by our own package. Force sim time to be enabled
     # !!! MAKE SURE YOU SET THE PACKAGE NAME CORRECTLY !!!
@@ -80,6 +97,56 @@ def generate_launch_description():
     #
     # Replace the diff_drive_spawner in the final return with delayed_diff_drive_spawner
 
+    slam_toolbox_launch_description = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'online_async_launch.py')
+        ]),
+        launch_arguments={
+            'params_file': os.path.join(get_package_share_directory('articubot_one'), 'config', 'mapper_params_online_async.yaml'),
+            'use_sim_time': 'true'
+        }.items(),
+        condition=IfCondition(LaunchConfiguration('activate_slam'))
+    )
+
+    delayed_slam_launch = TimerAction(
+        period=10.0, 
+        actions=[slam_toolbox_launch_description]
+    )
+
+    loc_launch_description = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            os.path.join(get_package_share_directory('nav2_bringup'), 'launch', 'localization_launch.py')
+        ]),
+        launch_arguments={
+            'params_file': os.path.join(get_package_share_directory('articubot_one'), 'config', 'nav2_params.yaml'),
+            'map':os.path.join(get_package_share_directory('articubot_one'), 'maps', 'map_gz_save.yaml'),
+            'use_sim_time': 'true'
+        }.items(),
+        condition=IfCondition(LaunchConfiguration('activate_loc'))
+    )
+
+    delayed_loc_launch = TimerAction(
+        period=10.0, 
+        actions=[loc_launch_description]
+    )
+
+    nav_launch_description = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            os.path.join(get_package_share_directory('nav2_bringup'), 'launch', 'navigation_launch.py')
+        ]),
+        launch_arguments={
+            'params_file': os.path.join(get_package_share_directory('articubot_one'), 'config', 'nav2_params.yaml'),
+            'use_sim_time': 'true',
+            'map_subscribe_transient_local': 'true'
+        }.items(),
+        condition=IfCondition(LaunchConfiguration('activate_nav'))
+    )
+
+    delayed_nav_launch = TimerAction(
+        period=20.0, 
+        actions=[nav_launch_description]
+    )
+
 
 
     # Launch them all!
@@ -89,5 +156,11 @@ def generate_launch_description():
         gazebo,
         spawn_entity,
         diff_drive_spawner,
-        joint_broad_spawner
+        joint_broad_spawner,
+        activate_loc_arg,
+        activate_nav_arg,
+        activate_slam_arg,
+        delayed_slam_launch,
+        delayed_loc_launch,
+        delayed_nav_launch
     ])
