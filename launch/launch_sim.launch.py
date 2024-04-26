@@ -109,7 +109,7 @@ def generate_launch_description():
     )
 
     delayed_slam_launch = TimerAction(
-        period=10.0, 
+        period=5.0, 
         actions=[slam_toolbox_launch_description]
     )
 
@@ -143,11 +143,18 @@ def generate_launch_description():
     )
 
     delayed_nav_launch = TimerAction(
-        period=20.0, 
+        period=10.0, 
         actions=[nav_launch_description]
     )
 
 
+    rviz_node = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='screen',
+        arguments=['-d', os.path.join(get_package_share_directory('articubot_one'), 'config', 'main.rviz')]
+    )
 
     # Launch them all!
     return LaunchDescription([
@@ -162,5 +169,6 @@ def generate_launch_description():
         activate_slam_arg,
         delayed_slam_launch,
         delayed_loc_launch,
-        delayed_nav_launch
+        delayed_nav_launch,
+        rviz_node
     ])
