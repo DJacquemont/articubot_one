@@ -102,6 +102,19 @@ def generate_launch_description():
         )
     )
 
+    storage_servo_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["storage_servo"],
+    )
+
+    delayed_storage_servo_spawner = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=controller_manager,
+            on_start=[storage_servo_spawner],
+        )
+    )
+
     # activate slam node after 10 seconds if it is activated
 
 
@@ -182,6 +195,7 @@ def generate_launch_description():
         delayed_controller_manager,
         delayed_diff_drive_spawner,
         delayed_joint_broad_spawner,
+        delayed_storage_servo_spawner,
         activate_slam_arg,
         delayed_slam_launch,
         activate_nav_arg,
