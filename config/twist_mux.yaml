@@ -2,13 +2,17 @@ twist_mux:
   ros__parameters:
     topics:
       navigation:
-        topic   : cmd_vel
+        topic   : cmd_vel_nav
         timeout : 0.5
         priority: 10
+      man_nav:
+        topic   : cmd_vel_mn
+        timeout : 0.5
+        priority: 20
       tracker:
         topic   : cmd_vel_tracker
         timeout : 0.5
-        priority: 20
+        priority: 30
       keyboard:
         topic   : cmd_vel_key
         timeout : 0.5
