@@ -224,6 +224,6 @@ def generate_launch_description():
         delayed_loc_launch,
         delayed_nav_launch,
         rviz_node,
-        oakd_imu_node,
-        oakd_imu_filter_node
+        # oakd_imu_node,
+        # oakd_imu_filter_node
     ])
