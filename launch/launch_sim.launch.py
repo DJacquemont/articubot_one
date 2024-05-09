@@ -31,6 +31,11 @@ def generate_launch_description():
         description='Flag to activate localisation'
     )
 
+    activate_cam_arg = DeclareLaunchArgument(
+        'activate_cam', default_value='false',
+        description='Flag to activate camera'
+    )
+
     # Include the robot_state_publisher launch file, provided by our own package. Force sim time to be enabled
     # !!! MAKE SURE YOU SET THE PACKAGE NAME CORRECTLY !!!
 
@@ -86,6 +91,11 @@ def generate_launch_description():
         arguments=["storage_servo"],
     )
 
+    yolov6_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(
+            get_package_share_directory('oakd_cam'), 'launch', 'yolov6_publisher.launch.py')]),
+        condition=IfCondition(LaunchConfiguration('activate_cam'))
+    )
 
     # Code for delaying a node (I haven't tested how effective it is)
     # 
@@ -153,7 +163,6 @@ def generate_launch_description():
         actions=[nav_launch_description]
     )
 
-
     rviz_node = Node(
         package='rviz2',
         executable='rviz2',
@@ -162,53 +171,6 @@ def generate_launch_description():
         arguments=['-d', os.path.join(get_package_share_directory('articubot_one'), 'config', 'main.rviz')]
     )
 
-    depthai_examples_path = get_package_share_directory('depthai_examples')
-    oakd_path = get_package_share_directory('oakd_cam')
-
-    default_resources_path = os.path.join(oakd_path, 'resources')
-
-    mxId         = LaunchConfiguration('mxId',      default = 'x')
-    usb2Mode     = LaunchConfiguration('usb2Mode',  default = False)
-    poeMode      = LaunchConfiguration('poeMode',   default = False)
-    camera_model = LaunchConfiguration('camera_model',  default = 'OAK-D')
-    tf_prefix    = LaunchConfiguration('tf_prefix',     default = 'oak')
-    base_frame   = LaunchConfiguration('base_frame',    default = 'oak-d_frame')
-    parent_frame = LaunchConfiguration('parent_frame',  default = 'oak-d-base-frame')
-    imuMode      = LaunchConfiguration('imuMode', default = '1')
-    nnName                  = LaunchConfiguration('nnName', default = 'x')
-    resourceBaseFolder      = LaunchConfiguration('resourceBaseFolder', default = default_resources_path)
-    angularVelCovariance  = LaunchConfiguration('angularVelCovariance', default = 0.02)
-    linearAccelCovariance = LaunchConfiguration('linearAccelCovariance', default = 0.02)
-    enableRosBaseTimeUpdate       = LaunchConfiguration('enableRosBaseTimeUpdate', default = False)
-
-    oakd_imu_node = Node(
-            package='oakd_cam', executable='oakd_imu_node',
-            output='screen',
-            parameters=[{'mxId':                    mxId},
-                        {'usb2Mode':                usb2Mode},
-                        {'poeMode':                 poeMode},
-                        {'resourceBaseFolder':      resourceBaseFolder},
-                        {'tf_prefix':               tf_prefix},
-                        {'imuMode':                 imuMode},
-                        {'angularVelCovariance':    angularVelCovariance},
-                        {'linearAccelCovariance':   linearAccelCovariance},
-                        {'nnName':                  nnName},
-                        {'enableRosBaseTimeUpdate': enableRosBaseTimeUpdate}
-                        ])
-
-    config_dir_oak = os.path.join(get_package_share_directory('oakd_cam'), 'config')
-
-    oakd_imu_filter_node = Node(
-        package='imu_filter_madgwick',
-        executable='imu_filter_madgwick_node',
-        name='imu_filter',
-        output='screen',
-        parameters=[os.path.join(config_dir_oak, 'imu_filter.yaml')]
-    )
-
-
-
-    # Launch them all!
     return LaunchDescription([
         rsp,
         twist_mux,
@@ -217,13 +179,13 @@ def generate_launch_description():
         diff_drive_spawner,
         joint_broad_spawner,
         storage_servo_spawner,
+        yolov6_launch,
         activate_loc_arg,
         activate_nav_arg,
         activate_slam_arg,
+        activate_cam_arg,
         delayed_slam_launch,
         delayed_loc_launch,
         delayed_nav_launch,
-        rviz_node,
-        # oakd_imu_node,
-        # oakd_imu_filter_node
+        rviz_node
     ])

@@ -34,6 +34,11 @@ def generate_launch_description():
         description='Flag to activate localisation'
     )
 
+    activate_cam_arg = DeclareLaunchArgument(
+        'activate_cam', default_value='false',
+        description='Flag to activate camera'
+    )
+
     package_name='articubot_one' #<--- CHANGE ME
 
     rsp = IncludeLaunchDescription(
@@ -61,6 +66,12 @@ def generate_launch_description():
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory(package_name),'launch','rplidar.launch.py'
                 )]), launch_arguments={'use_sim_time': 'false'}.items()
+    )
+
+    yolov6_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(
+            get_package_share_directory('oakd_cam'), 'launch', 'yolov6_publisher.launch.py')]),
+        condition=IfCondition(LaunchConfiguration('activate_cam'))
     )
 
     robot_description = Command(['ros2 param get --hide-type /robot_state_publisher robot_description'])
@@ -236,6 +247,8 @@ def generate_launch_description():
         # joystick,
         twist_mux,
         rplidar,
+        activate_cam_arg,
+        yolov6_launch,
         delayed_controller_manager,
         delayed_diff_drive_spawner,
         delayed_joint_broad_spawner,
@@ -245,7 +258,5 @@ def generate_launch_description():
         activate_nav_arg,
         delayed_nav_launch,
         activate_loc_arg,
-        delayed_loc_launch,
-        oakd_imu_node,
-        oakd_imu_filter_node
+        delayed_loc_launch
     ])
