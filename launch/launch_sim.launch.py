@@ -36,6 +36,11 @@ def generate_launch_description():
         description='Flag to activate camera'
     )
 
+    activate_sm_arg = DeclareLaunchArgument(
+        'activate_sm', default_value='false',
+        description='Flag to activate sm'
+    )
+
     # Include the robot_state_publisher launch file, provided by our own package. Force sim time to be enabled
     # !!! MAKE SURE YOU SET THE PACKAGE NAME CORRECTLY !!!
 
@@ -163,6 +168,18 @@ def generate_launch_description():
         actions=[nav_launch_description]
     )
 
+    sm_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            os.path.join(get_package_share_directory('bb_state_machine'), 'launch', 'bb_state_machine.launch.py')
+        ]),
+        condition=IfCondition(LaunchConfiguration('activate_sm'))
+    )
+
+    delayed_sm_launch = TimerAction(
+        period=15.0, 
+        actions=[sm_launch]
+    )
+
     rviz_node = Node(
         package='rviz2',
         executable='rviz2',
@@ -184,8 +201,10 @@ def generate_launch_description():
         activate_nav_arg,
         activate_slam_arg,
         activate_cam_arg,
+        activate_sm_arg,
         delayed_slam_launch,
         delayed_loc_launch,
         delayed_nav_launch,
+        delayed_sm_launch,
         rviz_node
     ])

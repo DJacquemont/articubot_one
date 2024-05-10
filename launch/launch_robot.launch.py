@@ -39,6 +39,11 @@ def generate_launch_description():
         description='Flag to activate camera'
     )
 
+    activate_sm_arg = DeclareLaunchArgument(
+        'activate_sm', default_value='false',
+        description='Flag to activate sm'
+    )
+
     package_name='articubot_one' #<--- CHANGE ME
 
     rsp = IncludeLaunchDescription(
@@ -66,12 +71,6 @@ def generate_launch_description():
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory(package_name),'launch','rplidar.launch.py'
                 )]), launch_arguments={'use_sim_time': 'false'}.items()
-    )
-
-    yolov6_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([os.path.join(
-            get_package_share_directory('oakd_cam'), 'launch', 'yolov6_publisher.launch.py')]),
-        condition=IfCondition(LaunchConfiguration('activate_cam'))
     )
 
     robot_description = Command(['ros2 param get --hide-type /robot_state_publisher robot_description'])
@@ -126,6 +125,18 @@ def generate_launch_description():
         )
     )
 
+
+    yolov6_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(
+            get_package_share_directory('oakd_cam'), 'launch', 'yolov6_publisher.launch.py')]),
+        condition=IfCondition(LaunchConfiguration('activate_cam'))
+    )
+
+    delayed_yolov6_launch = TimerAction(
+        period=10.0, 
+        actions=[yolov6_launch]
+    )
+
     # activate slam node after 10 seconds if it is activated
 
 
@@ -176,7 +187,7 @@ def generate_launch_description():
     )
 
     delayed_loc_launch = TimerAction(
-        period=10.0, 
+        period=20.0, 
         actions=[loc_launch_description]
     )
 
@@ -193,70 +204,39 @@ def generate_launch_description():
     )
 
     delayed_nav_launch = TimerAction(
-        period=20.0, 
+        period=30.0, 
         actions=[nav_launch_description]
     )
 
-    depthai_examples_path = get_package_share_directory('depthai_examples')
-    oakd_path = get_package_share_directory('oakd_cam')
-
-    default_resources_path = os.path.join(oakd_path, 'resources')
-
-    mxId         = LaunchConfiguration('mxId',      default = 'x')
-    usb2Mode     = LaunchConfiguration('usb2Mode',  default = False)
-    poeMode      = LaunchConfiguration('poeMode',   default = False)
-    camera_model = LaunchConfiguration('camera_model',  default = 'OAK-D')
-    tf_prefix    = LaunchConfiguration('tf_prefix',     default = 'oak')
-    base_frame   = LaunchConfiguration('base_frame',    default = 'oak-d_frame')
-    parent_frame = LaunchConfiguration('parent_frame',  default = 'oak-d-base-frame')
-    imuMode      = LaunchConfiguration('imuMode', default = '1')
-    nnName                  = LaunchConfiguration('nnName', default = 'x')
-    resourceBaseFolder      = LaunchConfiguration('resourceBaseFolder', default = default_resources_path)
-    angularVelCovariance  = LaunchConfiguration('angularVelCovariance', default = 0.02)
-    linearAccelCovariance = LaunchConfiguration('linearAccelCovariance', default = 0.02)
-    enableRosBaseTimeUpdate       = LaunchConfiguration('enableRosBaseTimeUpdate', default = False)
-
-    oakd_imu_node = Node(
-            package='oakd_cam', executable='oakd_imu_node',
-            output='screen',
-            parameters=[{'mxId':                    mxId},
-                        {'usb2Mode':                usb2Mode},
-                        {'poeMode':                 poeMode},
-                        {'resourceBaseFolder':      resourceBaseFolder},
-                        {'tf_prefix':               tf_prefix},
-                        {'imuMode':                 imuMode},
-                        {'angularVelCovariance':    angularVelCovariance},
-                        {'linearAccelCovariance':   linearAccelCovariance},
-                        {'nnName':                  nnName},
-                        {'enableRosBaseTimeUpdate': enableRosBaseTimeUpdate}
-                        ])
-
-    config_dir_oak = os.path.join(get_package_share_directory('oakd_cam'), 'config')
-
-    oakd_imu_filter_node = Node(
-        package='imu_filter_madgwick',
-        executable='imu_filter_madgwick_node',
-        name='imu_filter',
-        output='screen',
-        parameters=[os.path.join(config_dir_oak, 'imu_filter.yaml')]
+    sm_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            os.path.join(get_package_share_directory('bb_state_machine'), 'launch', 'bb_state_machine.launch.py')
+        ]),
+        condition=IfCondition(LaunchConfiguration('activate_sm'))
     )
 
-    # Launch them all!
+    delayed_sm_launch = TimerAction(
+        period=45.0, 
+        actions=[sm_launch]
+    )
+
     return LaunchDescription([
         rsp,
         # joystick,
         twist_mux,
         rplidar,
-        activate_cam_arg,
-        yolov6_launch,
         delayed_controller_manager,
         delayed_diff_drive_spawner,
         delayed_joint_broad_spawner,
         delayed_storage_servo_spawner,
+        activate_cam_arg,
+        delayed_yolov6_launch,
         activate_slam_arg,
         delayed_slam_launch,
         activate_nav_arg,
         delayed_nav_launch,
         activate_loc_arg,
-        delayed_loc_launch
+        delayed_loc_launch,
+        delayed_sm_launch,
+        activate_sm_arg
     ])
