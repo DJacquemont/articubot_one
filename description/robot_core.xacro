@@ -267,7 +267,7 @@
     </joint>
 
     <joint name="Stereo Cam" type="fixed">
-        <origin xyz="0.236 0.003 0.208" rpy="0 0.524 0"/>
+        <origin xyz="0.236 0.003 0.208" rpy="0 0.349 0"/>
         <parent link="base_link"/>
         <child link="Stereo_Cam_v1_1"/>
     </joint>

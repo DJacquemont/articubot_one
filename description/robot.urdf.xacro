@@ -15,5 +15,5 @@
     </xacro:unless>    
 
     <xacro:include filename="$(find articubot_one)/description/depthai_macro.urdf.xacro"/>
-    <xacro:depthai_camera camera_name = "oak" parent = "base_link" camera_model = "OAK-D-LITE" base_frame = "oak-d_frame" cam_pos_x = "0.2616" cam_pos_y = "-0.0001" cam_pos_z = "0.20" cam_roll = "0" cam_pitch = "0.524" cam_yaw = "0"/>
+    <xacro:depthai_camera camera_name = "oak" parent = "base_link" camera_model = "OAK-D-LITE" base_frame = "oak-d_frame" cam_pos_x = "0.2616" cam_pos_y = "-0.0001" cam_pos_z = "0.20" cam_roll = "0" cam_pitch = "0.349" cam_yaw = "0"/>
 </robot>
