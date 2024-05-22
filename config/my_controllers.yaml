@@ -1,6 +1,8 @@
 controller_manager:
   ros__parameters:
     update_rate: 30
+    fts_broadcaster:
+      type: force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster
     diff_cont:
       type: diff_drive_controller/DiffDriveController
     joint_broad:
@@ -36,3 +38,9 @@ storage_servo:
       - velocity
     has_velocity_limits: true
     max_velocity: 1.0
+
+fts_broadcaster:
+  ros__parameters:
+    interface_names.force.x: system_interface/force.x
+    interface_names.torque.z: system_interface/torque.z
+    frame_id: base_link

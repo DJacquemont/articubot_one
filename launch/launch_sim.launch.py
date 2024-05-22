@@ -96,6 +96,12 @@ def generate_launch_description():
         arguments=["storage_servo"],
     )
 
+    system_interface_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["fts_broadcaster"],
+    )
+
     yolov6_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
             get_package_share_directory('oakd_cam'), 'launch', 'yolov6_publisher.launch.py')]),
@@ -196,6 +202,7 @@ def generate_launch_description():
         diff_drive_spawner,
         joint_broad_spawner,
         storage_servo_spawner,
+        system_interface_spawner,
         yolov6_launch,
         activate_loc_arg,
         activate_nav_arg,

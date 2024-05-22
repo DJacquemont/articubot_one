@@ -125,6 +125,18 @@ def generate_launch_description():
         )
     )
 
+    system_interface_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["fts_broadcaster"],
+    )
+
+    delayed_system_interface_spawner = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=controller_manager,
+            on_start=[system_interface_spawner],
+        )
+    )
 
     yolov6_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
@@ -229,6 +241,7 @@ def generate_launch_description():
         delayed_diff_drive_spawner,
         delayed_joint_broad_spawner,
         delayed_storage_servo_spawner,
+        delayed_system_interface_spawner,
         activate_cam_arg,
         delayed_yolov6_launch,
         activate_slam_arg,
