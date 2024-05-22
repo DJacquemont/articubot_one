@@ -78,13 +78,13 @@
   <visual>
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="file://$(find articubot_one)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find blockbuster_core)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </visual>
   <collision>
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="file://$(find articubot_one)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find blockbuster_core)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -105,14 +105,14 @@
   <visual>
     <origin xyz="0.0575 0.136 -0.03775" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="file://$(find articubot_one)/meshes/Storage_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find blockbuster_core)/meshes/Storage_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="0.0575 0.136 -0.03775" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="file://$(find articubot_one)/meshes/Storage_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find blockbuster_core)/meshes/Storage_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -179,14 +179,14 @@
   <visual>
     <origin xyz="0.243 -0.185 -0.04975" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="file://$(find articubot_one)/meshes/Left_Caster_Wheel_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find blockbuster_core)/meshes/Left_Caster_Wheel_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="0.243 -0.185 -0.04975" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="file://$(find articubot_one)/meshes/Left_Caster_Wheel_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find blockbuster_core)/meshes/Left_Caster_Wheel_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -206,14 +206,14 @@
   <visual>
     <origin xyz="0.243 0.185 -0.04975" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="file://$(find articubot_one)/meshes/Right_Caster_Wheel_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find blockbuster_core)/meshes/Right_Caster_Wheel_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="0.243 0.185 -0.04975" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="file://$(find articubot_one)/meshes/Right_Caster_Wheel_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find blockbuster_core)/meshes/Right_Caster_Wheel_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -233,14 +233,14 @@
   <visual>
     <origin xyz="-0.104 0.0 -0.2005" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="file://$(find articubot_one)/meshes/Lidar_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find blockbuster_core)/meshes/Lidar_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="-0.104 0.0 -0.2005" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="file://$(find articubot_one)/meshes/Lidar_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find blockbuster_core)/meshes/Lidar_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>

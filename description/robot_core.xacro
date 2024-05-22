@@ -205,14 +205,14 @@
     <visual>
         <origin xyz="-0.104 0.0 -0.2005" rpy="0 0 0"/>
         <geometry>
-        <mesh filename="file://$(find articubot_one)/meshes/Lidar_1.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find blockbuster_core)/meshes/Lidar_1.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="-0.104 0.0 -0.2005" rpy="0 0 0"/>
         <geometry>
-        <mesh filename="file://$(find articubot_one)/meshes/Lidar_1.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find blockbuster_core)/meshes/Lidar_1.stl" scale="0.001 0.001 0.001"/>
         </geometry>
     </collision>
     </link>
@@ -226,14 +226,14 @@
     <visual>
         <origin xyz="-0.236 -0.003 -0.208" rpy="0 0 0"/>
         <geometry>
-        <mesh filename="file://$(find articubot_one)/meshes/Stereo_Cam_v1_1.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find blockbuster_core)/meshes/Stereo_Cam_v1_1.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="-0.236 -0.003 -0.208" rpy="0 0 0"/>
         <geometry>
-        <mesh filename="file://$(find articubot_one)/meshes/Stereo_Cam_v1_1.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find blockbuster_core)/meshes/Stereo_Cam_v1_1.stl" scale="0.001 0.001 0.001"/>
         </geometry>
     </collision>
     </link>
@@ -247,14 +247,14 @@
     <visual>
         <origin xyz="-0.2616 0.0001 -0.208539" rpy="0 0 0"/>
         <geometry>
-        <mesh filename="file://$(find articubot_one)/meshes/Cam_Window_v1_1.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find blockbuster_core)/meshes/Cam_Window_v1_1.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="-0.2616 0.0001 -0.208539" rpy="0 0 0"/>
         <geometry>
-        <mesh filename="file://$(find articubot_one)/meshes/Cam_Window_v1_1.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find blockbuster_core)/meshes/Cam_Window_v1_1.stl" scale="0.001 0.001 0.001"/>
         </geometry>
     </collision>
     </link>

@@ -44,7 +44,7 @@ def generate_launch_description():
     # Include the robot_state_publisher launch file, provided by our own package. Force sim time to be enabled
     # !!! MAKE SURE YOU SET THE PACKAGE NAME CORRECTLY !!!
 
-    package_name='articubot_one' #<--- CHANGE ME
+    package_name='blockbuster_core' #<--- CHANGE ME
 
     rsp = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
@@ -129,7 +129,7 @@ def generate_launch_description():
             os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'online_async_launch.py')
         ]),
         launch_arguments={
-            'params_file': os.path.join(get_package_share_directory('articubot_one'), 'config', 'mapper_params_online_async.yaml'),
+            'params_file': os.path.join(get_package_share_directory('blockbuster_core'), 'config', 'mapper_params_online_async.yaml'),
             'use_sim_time': 'true'
         }.items(),
         condition=IfCondition(LaunchConfiguration('activate_slam'))
@@ -145,8 +145,8 @@ def generate_launch_description():
             os.path.join(get_package_share_directory('nav2_bringup'), 'launch', 'localization_launch.py')
         ]),
         launch_arguments={
-            'params_file': os.path.join(get_package_share_directory('articubot_one'), 'config', 'nav2_params.yaml'),
-            'map':os.path.join(get_package_share_directory('articubot_one'), 'maps', 'map_arena_gz.yaml'),
+            'params_file': os.path.join(get_package_share_directory('blockbuster_core'), 'config', 'nav2_params.yaml'),
+            'map':os.path.join(get_package_share_directory('blockbuster_core'), 'maps', 'map_arena_gz.yaml'),
             'use_sim_time': 'true'
         }.items(),
         condition=IfCondition(LaunchConfiguration('activate_loc'))
@@ -162,7 +162,7 @@ def generate_launch_description():
             os.path.join(get_package_share_directory('nav2_bringup'), 'launch', 'navigation_launch.py')
         ]),
         launch_arguments={
-            'params_file': os.path.join(get_package_share_directory('articubot_one'), 'config', 'nav2_params.yaml'),
+            'params_file': os.path.join(get_package_share_directory('blockbuster_core'), 'config', 'nav2_params.yaml'),
             'use_sim_time': 'true',
             'map_subscribe_transient_local': 'true'
         }.items(),
@@ -191,7 +191,7 @@ def generate_launch_description():
         executable='rviz2',
         name='rviz2',
         output='screen',
-        arguments=['-d', os.path.join(get_package_share_directory('articubot_one'), 'config', 'main.rviz')]
+        arguments=['-d', os.path.join(get_package_share_directory('blockbuster_core'), 'config', 'main.rviz')]
     )
 
     return LaunchDescription([

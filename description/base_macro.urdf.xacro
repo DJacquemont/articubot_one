@@ -21,7 +21,7 @@
             <visual>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 <geometry>
-                    <mesh filename="file://$(find articubot_one)/meshes/${model}.stl" />
+                    <mesh filename="file://$(find blockbuster_core)/meshes/${model}.stl" />
                 </geometry>
                 <material name="mat">
                     <color rgba="${r} ${g} ${b} ${a}"/>
