@@ -157,6 +157,23 @@ def generate_launch_description():
         actions=[loc_launch_description]
     )
 
+    cost_launch_description = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            os.path.join(get_package_share_directory('blockbuster_core'), 'launch', 'costmap_filter_info.launch.py')
+        ]),
+        launch_arguments={
+            'params_file': os.path.join(get_package_share_directory('blockbuster_core'), 'config', 'costmap_params.yaml'),
+            'mask':os.path.join(get_package_share_directory('blockbuster_core'), 'maps', 'map_arena_keepout_gz.yaml'),
+            'use_sim_time': 'true'
+        }.items(),
+        condition=IfCondition(LaunchConfiguration('activate_nav'))
+    )
+
+    delayed_cost_launch = TimerAction(
+        period=10.0, 
+        actions=[cost_launch_description]
+    )
+
     nav_launch_description = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             os.path.join(get_package_share_directory('nav2_bringup'), 'launch', 'navigation_launch.py')
@@ -194,6 +211,11 @@ def generate_launch_description():
         arguments=['-d', os.path.join(get_package_share_directory('blockbuster_core'), 'config', 'main.rviz')]
     )
 
+    delayed_rviz_node = TimerAction(
+        period=10.0,  # Delay in seconds
+        actions=[rviz_node]
+    )
+
     return LaunchDescription([
         rsp,
         twist_mux,
@@ -211,7 +233,8 @@ def generate_launch_description():
         activate_sm_arg,
         delayed_slam_launch,
         delayed_loc_launch,
+        delayed_cost_launch,
         delayed_nav_launch,
         delayed_sm_launch,
-        rviz_node
+        delayed_rviz_node
     ])
