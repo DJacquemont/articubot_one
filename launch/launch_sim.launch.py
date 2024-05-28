@@ -16,35 +16,13 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
 
-    activate_slam_arg = DeclareLaunchArgument(
-        'activate_slam', default_value='false',
-        description='Flag to activate SLAM'
-    )
+    activate_slam_arg = DeclareLaunchArgument('activate_slam', default_value='false', description='Flag to activate SLAM')
+    activate_nav_arg = DeclareLaunchArgument('activate_nav', default_value='false', description='Flag to activate Nav2')
+    activate_loc_arg = DeclareLaunchArgument('activate_loc', default_value='false', description='Flag to activate localisation')
+    activate_cam_arg = DeclareLaunchArgument('activate_cam', default_value='false', description='Flag to activate camera')
+    activate_sm_arg = DeclareLaunchArgument('activate_sm', default_value='false', description='Flag to activate sm')
 
-    activate_nav_arg = DeclareLaunchArgument(
-        'activate_nav', default_value='false',
-        description='Flag to activate Nav2'
-    )
-
-    activate_loc_arg = DeclareLaunchArgument(
-        'activate_loc', default_value='false',
-        description='Flag to activate localisation'
-    )
-
-    activate_cam_arg = DeclareLaunchArgument(
-        'activate_cam', default_value='false',
-        description='Flag to activate camera'
-    )
-
-    activate_sm_arg = DeclareLaunchArgument(
-        'activate_sm', default_value='false',
-        description='Flag to activate sm'
-    )
-
-    # Include the robot_state_publisher launch file, provided by our own package. Force sim time to be enabled
-    # !!! MAKE SURE YOU SET THE PACKAGE NAME CORRECTLY !!!
-
-    package_name='blockbuster_core' #<--- CHANGE ME
+    package_name='blockbuster_core'
 
     rsp = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
@@ -61,8 +39,6 @@ def generate_launch_description():
         )
 
     gazebo_params_file = os.path.join(get_package_share_directory(package_name),'config','gazebo_params.yaml')
-
-    # Include the Gazebo launch file, provided by the gazebo_ros package
     gazebo = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py')]),
@@ -71,7 +47,6 @@ def generate_launch_description():
                                       }.items()
              )
 
-    # Run the spawner node from the gazebo_ros package. The entity name doesn't really matter if you only have a single robot.
     spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
                         arguments=['-topic', 'robot_description',
                                    '-entity', 'my_bot'],
@@ -107,22 +82,6 @@ def generate_launch_description():
             get_package_share_directory('oakd_cam'), 'launch', 'yolov6_publisher.launch.py')]),
         condition=IfCondition(LaunchConfiguration('activate_cam'))
     )
-
-    # Code for delaying a node (I haven't tested how effective it is)
-    # 
-    # First add the below lines to imports
-    # from launch.actions import RegisterEventHandler
-    # from launch.event_handlers import OnProcessExit
-    #
-    # Then add the following below the current diff_drive_spawner
-    # delayed_diff_drive_spawner = RegisterEventHandler(
-    #     event_handler=OnProcessExit(
-    #         target_action=spawn_entity,
-    #         on_exit=[diff_drive_spawner],
-    #     )
-    # )
-    #
-    # Replace the diff_drive_spawner in the final return with delayed_diff_drive_spawner
 
     slam_toolbox_launch_description = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
@@ -212,7 +171,7 @@ def generate_launch_description():
     )
 
     delayed_rviz_node = TimerAction(
-        period=10.0,  # Delay in seconds
+        period=10.0,
         actions=[rviz_node]
     )
 

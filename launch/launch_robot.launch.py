@@ -16,48 +16,19 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
 
-    # Include the robot_state_publisher launch file, provided by our own package. Force sim time to be enabled
-    # !!! MAKE SURE YOU SET THE PACKAGE NAME CORRECTLY !!!
+    activate_slam_arg = DeclareLaunchArgument('activate_slam', default_value='false', description='Flag to activate SLAM')
+    activate_nav_arg = DeclareLaunchArgument('activate_nav', default_value='false', description='Flag to activate Nav2')
+    activate_loc_arg = DeclareLaunchArgument('activate_loc', default_value='false', description='Flag to activate localisation')
+    activate_cam_arg = DeclareLaunchArgument('activate_cam', default_value='false', description='Flag to activate camera')
+    activate_sm_arg = DeclareLaunchArgument('activate_sm', default_value='false', description='Flag to activate sm')
 
-    activate_slam_arg = DeclareLaunchArgument(
-        'activate_slam', default_value='false',
-        description='Flag to activate SLAM'
-    )
-
-    activate_nav_arg = DeclareLaunchArgument(
-        'activate_nav', default_value='false',
-        description='Flag to activate Nav2'
-    )
-
-    activate_loc_arg = DeclareLaunchArgument(
-        'activate_loc', default_value='false',
-        description='Flag to activate localisation'
-    )
-
-    activate_cam_arg = DeclareLaunchArgument(
-        'activate_cam', default_value='false',
-        description='Flag to activate camera'
-    )
-
-    activate_sm_arg = DeclareLaunchArgument(
-        'activate_sm', default_value='false',
-        description='Flag to activate sm'
-    )
-
-    package_name='blockbuster_core' #<--- CHANGE ME
+    package_name='blockbuster_core'
 
     rsp = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory(package_name),'launch','rsp.launch.py'
                 )]), launch_arguments={'use_sim_time': 'false', 'use_ros2_control': 'true'}.items()
     )
-
-    # joystick = IncludeLaunchDescription(
-    #             PythonLaunchDescriptionSource([os.path.join(
-    #                 get_package_share_directory(package_name),'launch','joystick.launch.py'
-    #             )])
-    # )
-
 
     twist_mux_params = os.path.join(get_package_share_directory(package_name),'config','twist_mux.yaml')
     twist_mux = Node(
@@ -149,27 +120,6 @@ def generate_launch_description():
         actions=[yolov6_launch]
     )
 
-    # activate slam node after 10 seconds if it is activated
-
-
-
-    # Code for delaying a node (I haven't tested how effective it is)
-    # 
-    # First add the below lines to imports
-    # from launch.actions import RegisterEventHandler
-    # from launch.event_handlers import OnProcessExit
-    #
-    # Then add the following below the current diff_drive_spawner
-    # delayed_diff_drive_spawner = RegisterEventHandler(
-    #     event_handler=OnProcessExit(
-    #         target_action=spawn_entity,
-    #         on_exit=[diff_drive_spawner],
-    #     )
-    # )
-    #
-    # Replace the diff_drive_spawner in the final return with delayed_diff_drive_spawner
-
-    # Use a Python function to decide whether to include the SLAM launch
     slam_toolbox_launch_description = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'online_async_launch.py')
@@ -234,7 +184,6 @@ def generate_launch_description():
 
     return LaunchDescription([
         rsp,
-        # joystick,
         twist_mux,
         rplidar,
         delayed_controller_manager,
@@ -250,6 +199,6 @@ def generate_launch_description():
         delayed_nav_launch,
         activate_loc_arg,
         delayed_loc_launch,
-        delayed_sm_launch,
-        activate_sm_arg
+        activate_sm_arg,
+        delayed_sm_launch
     ])
