@@ -142,7 +142,7 @@ def generate_launch_description():
         ]),
         launch_arguments={
             'params_file': os.path.join(get_package_share_directory('blockbuster_core'), 'config', 'nav2_params.yaml'),
-            'map':os.path.join(get_package_share_directory('blockbuster_core'), 'maps', 'map_lr.yaml'),
+            'map':os.path.join(get_package_share_directory('blockbuster_core'), 'maps', 'map_arena_l0.yaml'),
             'use_sim_time': 'false'
         }.items(),
         condition=IfCondition(LaunchConfiguration('activate_loc'))
@@ -152,6 +152,23 @@ def generate_launch_description():
         period=20.0, 
         actions=[loc_launch_description]
     )
+
+    # cost_launch_description = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource([
+    #         os.path.join(get_package_share_directory('blockbuster_core'), 'launch', 'costmap_filter_info.launch.py')
+    #     ]),
+    #     launch_arguments={
+    #         'params_file': os.path.join(get_package_share_directory('blockbuster_core'), 'config', 'costmap_params.yaml'),
+    #         'mask':os.path.join(get_package_share_directory('blockbuster_core'), 'maps', 'map_arena_l0_keepout.yaml'),
+    #         'use_sim_time': 'true'
+    #     }.items(),
+    #     condition=IfCondition(LaunchConfiguration('activate_nav'))
+    # )
+
+    # delayed_cost_launch = TimerAction(
+    #     period=10.0, 
+    #     actions=[cost_launch_description]
+    # )
 
     nav_launch_description = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
@@ -199,6 +216,7 @@ def generate_launch_description():
         delayed_nav_launch,
         activate_loc_arg,
         delayed_loc_launch,
+        # delayed_cost_launch,
         activate_sm_arg,
         delayed_sm_launch
     ])
