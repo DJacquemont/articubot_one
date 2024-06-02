@@ -192,7 +192,7 @@ def generate_launch_description():
         activate_sm_arg,
         delayed_slam_launch,
         delayed_loc_launch,
-        delayed_cost_launch,
+        # delayed_cost_launch,
         delayed_nav_launch,
         delayed_sm_launch,
         delayed_rviz_node
