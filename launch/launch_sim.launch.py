@@ -170,11 +170,6 @@ def generate_launch_description():
         arguments=['-d', os.path.join(get_package_share_directory('blockbuster_core'), 'config', 'main.rviz')]
     )
 
-    delayed_rviz_node = TimerAction(
-        period=10.0,
-        actions=[rviz_node]
-    )
-
     return LaunchDescription([
         rsp,
         twist_mux,
@@ -195,5 +190,5 @@ def generate_launch_description():
         # delayed_cost_launch,
         delayed_nav_launch,
         delayed_sm_launch,
-        delayed_rviz_node
+        rviz_node
     ])
