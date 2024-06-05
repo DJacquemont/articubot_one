@@ -142,7 +142,7 @@ def generate_launch_description():
         ]),
         launch_arguments={
             'params_file': os.path.join(get_package_share_directory('blockbuster_core'), 'config', 'nav2_params.yaml'),
-            'map':os.path.join(get_package_share_directory('blockbuster_core'), 'maps', 'map_arena_gz.yaml'),
+            'map':os.path.join(get_package_share_directory('blockbuster_core'), 'maps', 'map_arena_test.yaml'),
             'use_sim_time': 'false'
         }.items(),
         condition=IfCondition(LaunchConfiguration('activate_loc'))
@@ -159,7 +159,7 @@ def generate_launch_description():
         ]),
         launch_arguments={
             'params_file': os.path.join(get_package_share_directory('blockbuster_core'), 'config', 'costmap_params.yaml'),
-            'mask':os.path.join(get_package_share_directory('blockbuster_core'), 'maps', 'map_arena_keepout_gz.yaml'),
+            'mask':os.path.join(get_package_share_directory('blockbuster_core'), 'maps', 'map_arena_test_keepout.yaml'),
             'use_sim_time': 'true'
         }.items(),
         condition=IfCondition(LaunchConfiguration('activate_nav'))
