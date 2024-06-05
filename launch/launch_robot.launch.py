@@ -142,7 +142,7 @@ def generate_launch_description():
         ]),
         launch_arguments={
             'params_file': os.path.join(get_package_share_directory('blockbuster_core'), 'config', 'nav2_params.yaml'),
-            'map':os.path.join(get_package_share_directory('blockbuster_core'), 'maps', 'map_arena_l0.yaml'),
+            'map':os.path.join(get_package_share_directory('blockbuster_core'), 'maps', 'map_arena_gz.yaml'),
             'use_sim_time': 'false'
         }.items(),
         condition=IfCondition(LaunchConfiguration('activate_loc'))
@@ -159,7 +159,7 @@ def generate_launch_description():
         ]),
         launch_arguments={
             'params_file': os.path.join(get_package_share_directory('blockbuster_core'), 'config', 'costmap_params.yaml'),
-            'mask':os.path.join(get_package_share_directory('blockbuster_core'), 'maps', 'map_arena_l0_keepout.yaml'),
+            'mask':os.path.join(get_package_share_directory('blockbuster_core'), 'maps', 'map_arena_keepout_gz.yaml'),
             'use_sim_time': 'true'
         }.items(),
         condition=IfCondition(LaunchConfiguration('activate_nav'))
@@ -183,7 +183,7 @@ def generate_launch_description():
     )
 
     delayed_nav_launch = TimerAction(
-        period=15.0, 
+        period=18.0, 
         actions=[nav_launch_description]
     )
 
@@ -195,7 +195,7 @@ def generate_launch_description():
     )
 
     delayed_sm_launch = TimerAction(
-        period=25.0, 
+        period=28.0, 
         actions=[sm_launch]
     )
 
