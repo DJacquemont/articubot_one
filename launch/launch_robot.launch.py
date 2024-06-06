@@ -177,7 +177,8 @@ def generate_launch_description():
         launch_arguments={
             'params_file': os.path.join(get_package_share_directory('blockbuster_core'), 'config', 'nav2_params.yaml'),
             'use_sim_time': 'false',
-            'map_subscribe_transient_local': 'true'
+            'map_subscribe_transient_local': 'true',
+            'log_level': 'error'
         }.items(),
         condition=IfCondition(LaunchConfiguration('activate_nav'))
     )
