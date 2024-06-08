@@ -169,7 +169,7 @@ def generate_launch_description():
         period=10.0, 
         actions=[cost_launch_description]
     )
-
+    
     nav_launch_description = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             os.path.join(get_package_share_directory('nav2_bringup'), 'launch', 'navigation_launch.py')
@@ -178,7 +178,7 @@ def generate_launch_description():
             'params_file': os.path.join(get_package_share_directory('blockbuster_core'), 'config', 'nav2_params.yaml'),
             'use_sim_time': 'false',
             'map_subscribe_transient_local': 'true',
-            'log_level': 'error'
+            'log_level': 'info'
         }.items(),
         condition=IfCondition(LaunchConfiguration('activate_nav'))
     )
