@@ -56,7 +56,7 @@ bt_navigator:
     # nav2_bt_navigator/navigate_to_pose_w_replanning_and_recovery.xml
     # nav2_bt_navigator/navigate_through_poses_w_replanning_and_recovery.xml
     # They can be set here or via a RewrittenYaml remap from a parent launch file to Nav2.
-    # cp src/blockbuster_core/config/bt.xml /opt/ros/humble/share/nav2_bt_navigator/behavior_trees/
+    # cp colcon_ws/src/blockbuster_core/config/bt.xml /opt/ros/humble/share/nav2_bt_navigator/behavior_trees/
     default_nav_to_pose_bt_xml: '/opt/ros/humble/share/nav2_bt_navigator/behavior_trees/bt.xml'
     plugin_lib_names:
     - nav2_compute_path_to_pose_action_bt_node
@@ -140,14 +140,14 @@ controller_server:
     # DWB parameters
     FollowPath:
       plugin: "dwb_core::DWBLocalPlanner"
-      debug_trajectory_details: True
+      debug_trajectory_details: False  
       min_vel_x: 0.0
       min_vel_y: 0.0
-      max_vel_x: 0.35
+      max_vel_x: 0.30
       max_vel_y: 0.0
       max_vel_theta: 0.8
       min_speed_xy: 0.0
-      max_speed_xy: 0.35
+      max_speed_xy: 0.30
       min_speed_theta: 0.0
       # Add high threshold velocity for turtlebot 3 issue.
       # https://github.com/ROBOTIS-GIT/turtlebot3_simulations/issues/75
@@ -349,8 +349,8 @@ velocity_smoother:
     smoothing_frequency: 20.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
-    max_velocity: [0.35, 0.0, 0.8]
-    min_velocity: [-0.35, 0.0, -1.0]
+    max_velocity: [0.30, 0.0, 0.8]
+    min_velocity: [-0.30, 0.0, -1.0]
     max_accel: [2.5, 0.0, 2.0]
     max_decel: [-2.5, 0.0, -2.0]
     odom_topic: "odom"
