@@ -116,7 +116,7 @@ def generate_launch_description():
     )
 
     delayed_yolov6_launch = TimerAction(
-        period=5.0, 
+        period=3.0, 
         actions=[yolov6_launch]
     )
 
@@ -149,7 +149,7 @@ def generate_launch_description():
     )
 
     delayed_loc_launch = TimerAction(
-        period=10.0, 
+        period=5.0, 
         actions=[loc_launch_description]
     )
 
@@ -166,7 +166,7 @@ def generate_launch_description():
     )
 
     delayed_cost_launch = TimerAction(
-        period=10.0, 
+        period=12.0, 
         actions=[cost_launch_description]
     )
     
@@ -184,7 +184,7 @@ def generate_launch_description():
     )
 
     delayed_nav_launch = TimerAction(
-        period=18.0, 
+        period=15.0, 
         actions=[nav_launch_description]
     )
 
@@ -196,7 +196,7 @@ def generate_launch_description():
     )
 
     delayed_sm_launch = TimerAction(
-        period=28.0, 
+        period=16.0, 
         actions=[sm_launch]
     )
 
