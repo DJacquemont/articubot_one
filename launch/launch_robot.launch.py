@@ -190,7 +190,7 @@ def generate_launch_description():
 
     sm_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
-            os.path.join(get_package_share_directory('bb_state_machine'), 'launch', 'bb_state_machine.launch.py')
+            os.path.join(get_package_share_directory('blockbuster_sm'), 'launch', 'blockbuster_sm.launch.py')
         ]),
         condition=IfCondition(LaunchConfiguration('activate_sm'))
     )

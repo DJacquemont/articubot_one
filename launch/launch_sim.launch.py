@@ -104,8 +104,8 @@ def generate_launch_description():
             os.path.join(get_package_share_directory('nav2_bringup'), 'launch', 'localization_launch.py')
         ]),
         launch_arguments={
-            'params_file': os.path.join(get_package_share_directory('blockbuster_core'), 'config', 'nav2_params.yaml'),
-            'map':os.path.join(get_package_share_directory('blockbuster_core'), 'maps', 'map_arena_gz.yaml'),
+            'params_file': os.path.join(get_package_share_directory('blockbuster_core'), 'config', 'nav2_params_sim.yaml'),
+            'map':os.path.join(get_package_share_directory('blockbuster_core'), 'maps', 'map_arena_test.yaml'),
             'use_sim_time': 'true'
         }.items(),
         condition=IfCondition(LaunchConfiguration('activate_loc'))
@@ -122,7 +122,7 @@ def generate_launch_description():
         ]),
         launch_arguments={
             'params_file': os.path.join(get_package_share_directory('blockbuster_core'), 'config', 'costmap_params.yaml'),
-            'mask':os.path.join(get_package_share_directory('blockbuster_core'), 'maps', 'map_arena_keepout_gz.yaml'),
+            'mask':os.path.join(get_package_share_directory('blockbuster_core'), 'maps', 'map_arena_test_keepout.yaml'),
             'use_sim_time': 'true'
         }.items(),
         condition=IfCondition(LaunchConfiguration('activate_nav'))
@@ -138,9 +138,10 @@ def generate_launch_description():
             os.path.join(get_package_share_directory('nav2_bringup'), 'launch', 'navigation_launch.py')
         ]),
         launch_arguments={
-            'params_file': os.path.join(get_package_share_directory('blockbuster_core'), 'config', 'nav2_params.yaml'),
+            'params_file': os.path.join(get_package_share_directory('blockbuster_core'), 'config', 'nav2_params_sim.yaml'),
             'use_sim_time': 'true',
-            'map_subscribe_transient_local': 'true'
+            'map_subscribe_transient_local': 'true',
+            'log_level': 'error'
         }.items(),
         condition=IfCondition(LaunchConfiguration('activate_nav'))
     )
@@ -152,7 +153,7 @@ def generate_launch_description():
 
     sm_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
-            os.path.join(get_package_share_directory('bb_state_machine'), 'launch', 'bb_state_machine.launch.py')
+            os.path.join(get_package_share_directory('blockbuster_sm'), 'launch', 'blockbuster_sm.launch.py')
         ]),
         condition=IfCondition(LaunchConfiguration('activate_sm'))
     )
@@ -187,7 +188,7 @@ def generate_launch_description():
         activate_sm_arg,
         delayed_slam_launch,
         delayed_loc_launch,
-        # delayed_cost_launch,
+        delayed_cost_launch,
         delayed_nav_launch,
         delayed_sm_launch,
         rviz_node
